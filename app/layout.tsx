@@ -9,5 +9,5 @@ export const metadata: Metadata = {
 const introScript = `(function(){try{document.documentElement.dataset.intro=window.matchMedia('(prefers-reduced-motion: reduce)').matches||sessionStorage.getItem('davidPortfolioIntroPlayed')==='true'?'done':'pending'}catch(e){document.documentElement.dataset.intro='done'}})()`;
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en" suppressHydrationWarning><head><link rel="preload" as="image" href="/images/david-eid-portrait.png" /><link rel="preload" as="image" href="/images/david-eid-portrait-mask.png" /><script dangerouslySetInnerHTML={{ __html: introScript }} /></head><body>{children}</body></html>;
+  return <html lang="en" suppressHydrationWarning><head><link rel="preload" as="image" href="/images/david-eid-portrait-cutout.png" /><script dangerouslySetInnerHTML={{ __html: introScript }} /></head><body>{children}</body></html>;
 }

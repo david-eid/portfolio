@@ -26,11 +26,8 @@ export default function Home() {
       settled = true;
     } else {
       const portrait = hero.current?.querySelector<HTMLImageElement>('.portrait');
-      const mask = new Image();
-      mask.src = '/images/david-eid-portrait-mask.png';
-      // Decode both existing assets before starting the coordinated timeline.
-      // The displayed RGB pixels always come from David's original photograph.
-      Promise.allSettled([portrait?.decode(), mask.decode()]).then(() => {
+      // Keep the curtain in place until the original-photo cutout is decoded.
+      Promise.allSettled([portrait?.decode()]).then(() => {
         if (disposed || reduced.matches) return;
         document.documentElement.dataset.intro = 'play';
         timer = window.setTimeout(() => {
@@ -95,7 +92,7 @@ export default function Home() {
         </header>
         <div className="hero-name reveal"><h1>David Eid</h1><p>Computer engineering / AI / Software systems</p></div>
         <div className="word-position" aria-hidden="true"><div className="word-depth"><div className="hero-word">ENGINEER</div></div></div>
-        <div className="portrait-position"><div className="portrait-depth"><img className="portrait" src="/images/david-eid-portrait.png" alt="David Eid wearing a gray blazer and black shirt" width="1254" height="1254" fetchPriority="high" decoding="sync" /></div></div>
+        <div className="portrait-position"><div className="portrait-depth"><img className="portrait" src="/images/david-eid-portrait-cutout.png" alt="David Eid wearing a gray blazer and black shirt" width="1254" height="1254" fetchPriority="high" decoding="sync" /></div></div>
         <div className="hero-information">
           <div className="identity"><p className="identity-name reveal">David Eid</p><p className="role reveal">Computer Engineer</p><p className="role second-role reveal">AI & Full-Stack Engineer</p><p className="location reveal">Beirut, Lebanon</p><a className="editorial-link reveal" href="#projects">Explore work <span aria-hidden="true">↗</span></a></div>
           <div className="hero-expertise" aria-label="Areas of expertise">{expertise.map((item, i) => <p className={`reveal expertise-line expertise-${i}`} key={item}>{item}</p>)}</div>

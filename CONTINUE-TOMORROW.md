@@ -1,66 +1,20 @@
-DAVID EID PORTFOLIO — CONTINUE TOMORROW
+﻿# David Eid portfolio — continuation
 
+Do not start over or redesign the existing work.
 
-
-Do not start over.
-
-
+Completed September 14, 2026:
+- Created public/images/david-eid-portrait-cutout.png with real alpha transparency.
+- Used the original photo RGB and existing mask alpha, with explicit user approval; original face, hair, beard, gray blazer and black shirt pixels are unchanged.
+- Integrated the cutout and its preload; removed duplicate CSS masking and portrait opacity animation.
+- Portrait now rises from below, remaining opaque in front of ENGINEER.
+- Preserved the existing curtain, typography, layout, copy and supporting sections.
+- Passed production build, TypeScript and 11 desktop/tablet/mobile viewport checks.
+- Reviewed viewport and entrance screenshots; checked session replay, reduced motion and mobile navigation.
 
 Current portrait files:
-
 public/images/david-eid-portrait.png
-
 public/images/david-eid-portrait-mask.png
-
-
-
-Next task:
-
-Create:
-
 public/images/david-eid-portrait-cutout.png
 
-
-
-The cutout must have a transparent background and preserve David's real face, hair, beard, gray blazer, black shirt, and natural appearance.
-
-
-
-Hero animation:
-
-BLACK SCREEN
-
-→ DE / DAVID EID
-
-→ black curtain slides upward
-
-→ huge ENGINEER text appears
-
-→ David portrait rises from bottom
-
-→ portrait stays in front of ENGINEER
-
-→ DAVID EID
-
-→ COMPUTER ENGINEER
-
-→ AI \& FULL-STACK ENGINEER
-
-→ EXPLORE WORK
-
-→ SCROLL
-
-
-
-Do not redesign the existing work.
-
-Inspect the current repository first and continue from what already exists.
-
-
-
-After the hero is finished:
-
-test desktop, tablet, and mobile.
-
-Fix clipping, overflow, portrait size, and animation timing.
-
+Read README.md for timing, validation details and remaining content needs.
+Existing local QA scripts and screenshots: work/hero-qa/ (ignored by Git).
