@@ -24,7 +24,19 @@ Certifications retain the supplied issuer relationship: the AI-102 entry is Udem
 
 ## Portrait and visuals
 
-`public/images/david-eid-portrait-cutout.png` combines the original photo RGB with the existing mask alpha, as explicitly authorized in the preceding task. The underlying portrait pixels remain unchanged. The homepage adds a restrained CSS saturation treatment and lower-edge fade; it does not generate or replace David's face.
+The homepage uses the supplied eight-second portrait video through a native HTML video element, with muted autoplay, looping, inline mobile playback and no controls. The square frame uses `object-fit: contain` so the site never crops the head or shoulders. The introduction sits beside the portrait on desktop and below it on phones.
+
+Web assets live in `public/media/`: a 960px H.264 MP4 (1.09 MB), a 640px mobile MP4 (381 KB), and a first-frame WebP poster (44 KB). Both videos have no audio track and use fast-start metadata. The poster is preloaded and remains visible while playback loads or autoplay is unavailable. Reduced-motion visitors receive the still image without downloading video; changing the preference updates the hero immediately. Playback pauses offscreen or in a hidden tab.
+
+To regenerate from the supplied source using FFmpeg:
+
+```sh
+ffmpeg -i source.mp4 -an -vf "scale=960:960,fps=24" -c:v libx264 -preset slow -crf 25 -pix_fmt yuv420p -movflags +faststart public/media/david-eid-portrait.mp4
+ffmpeg -i source.mp4 -an -vf "scale=640:640,fps=24" -c:v libx264 -preset slow -crf 27 -pix_fmt yuv420p -movflags +faststart public/media/david-eid-portrait-mobile.mp4
+ffmpeg -i source.mp4 -frames:v 1 -c:v libwebp -quality 85 public/media/david-eid-poster.webp
+```
+
+The original cutout remains in use on the About section.
 
 Project media are original code-native conceptual illustrations, labeled accordingly. They are not product screenshots. The DE mark is an original geometric SVG. Inter and basis33 load from the font URLs provided in the brief, with local system fallbacks. No social-preview image was requested or added.
 
@@ -57,3 +69,10 @@ Hero ? 01 Selected Work ? 02 Experience ? 03 About ? 04 Expertise ? 05 Education
 The first three projects use large editorial panels; the remaining three use a smaller layout. Both hero controls lead to Projects. Existing case-study routes remain available. Expertise supports hover, keyboard activation and tap. Six certifications are highlighted, with four more available through the expand control. Contact uses the shared profile email.
 
 The September 14 editorial update passed the production build, focused lint, and browser checks at 1440px, 393px and 320px. Verified section order, project routes, certification expansion, expertise controls, navigation, wheel input, simulated mobile swipe and no intro auto-scroll. No browser console or runtime errors were recorded. Local QA scripts are in `work/hero-qa/editorial-qa.mjs` and `work/hero-qa/editorial-scroll.mjs`.
+
+
+## September 25 portrait video validation
+
+Production build and targeted lint passed. Browser checks covered 1440x900, 1920x1080, 768x1024, 393x852, 320x568 and 844x390: muted inline autoplay, looping, responsive source selection, square uncropped media, non-overlapping layout and no horizontal overflow. Reduced-motion checks confirmed a loaded poster and zero MP4 requests, including live preference changes. The hero project link and media failure poster were checked. Screenshots and the local Playwright script are in the ignored `work/hero-qa/` directory.
+
+Preview with `npm install` then `npm run dev` and open http://127.0.0.1:3000/. For a production preview, run `npm run build` then `npm run start` (stop the dev server first).

@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowDown, ArrowUpRight } from 'lucide-react';
+import { HeroPortrait } from '@/components/portfolio/HeroPortrait';
 import { Logo } from '@/components/portfolio/Logo';
 import { EmbeddedPage } from '@/components/portfolio/Page';
 import About from './pages/About';
@@ -10,7 +11,6 @@ import Contact from './pages/Contact';
 import Education from './pages/Education';
 
 export default function Home() {
-  const portrait = useRef<HTMLImageElement>(null);
   const [intro, setIntro] = useState<'pending' | 'play' | 'done'>(() => {
     try { return matchMedia('(prefers-reduced-motion: reduce)').matches || sessionStorage.getItem('davidPortfolioIntroPlayed') === 'true' ? 'done' : 'pending'; }
     catch { return 'done'; }
@@ -22,7 +22,7 @@ export default function Home() {
     const finish = () => { setIntro('done'); try { sessionStorage.setItem('davidPortfolioIntroPlayed', 'true'); } catch { /* Storage may be disabled. */ } };
     const change = () => { if (reduced.matches) finish(); };
     if (intro === 'pending') {
-      void Promise.allSettled([portrait.current?.decode()]).then(() => {
+      void Promise.resolve().then(() => {
         if (cancelled) return;
         if (reduced.matches) { finish(); return; }
         setIntro('play');
@@ -35,12 +35,16 @@ export default function Home() {
 
   return <main id="main-content" tabIndex={-1} className="home" data-intro={intro}>
     {intro !== 'done' && <div className="intro-curtain" aria-hidden="true"><div className="intro-mark"><Logo /><span>David Eid</span></div></div>}
-    <section className="portrait-hero" aria-label="David Eid — Computer Engineer">
+    <section className="portrait-hero" aria-label="David Eid - Computer Engineer">
       <h1 className="hero-word">ENGINEER</h1>
-      <div className="portrait-position"><img ref={portrait} className="portrait" src="/images/david-eid-portrait-cutout.png" alt="David Eid wearing a gray blazer and black shirt" width={1254} height={1254} fetchPriority="high" decoding="async" /></div>
-      <div className="hero-identity home-reveal"><p>David Eid</p><p>Computer Engineer<br />AI &amp; Full-Stack Engineer</p></div>
-      <p className="hero-disciplines home-reveal">AI Engineering<br />LLM Systems<br />Full-Stack<br />Scalable Systems</p>
-      <a className="hero-explore" href="#projects">Explore work <ArrowUpRight size={17} /></a>
+      <div className="hero-content">
+        <div className="hero-copy home-reveal">
+          <div className="hero-identity"><p>David Eid</p><p>Computer Engineer<br />AI &amp; Full-Stack Engineer</p></div>
+          <p className="hero-introduction">I build intelligent systems and digital products, from LLM applications to scalable full-stack architectures.</p>
+          <a className="hero-explore" href="#projects">Explore work <ArrowUpRight size={17} /></a>
+        </div>
+        <HeroPortrait />
+      </div>
       <a className="hero-scroll" href="#projects">Scroll <ArrowDown size={12} /></a>
     </section>
     <EmbeddedPage.Provider value={true}>
