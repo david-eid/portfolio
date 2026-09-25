@@ -1,0 +1,6 @@
+import { experience } from '../data/experience';
+import { Page, PageHeading } from '@/components/portfolio/Page';
+
+export default function Experience() {
+  return <Page className="experience-page"><PageHeading index="02" label="Experience" description="Software delivery, intelligent products and a practical understanding of how businesses work.">Built through<br /><span className="font-pixel">real work.</span></PageHeading><div className="experience-timeline">{experience.map(job=><article key={job.company} className={`experience-item ${job.company==='EID REAL ESTATE'?'business-experience':''}`}><div className="experience-date"><span className="font-pixel">{job.year}</span><p>{job.period}</p></div><div className="experience-content"><div className="experience-title"><div><h2>{job.company}</h2><h3>{job.role}</h3></div><span className="employment-type">{job.type}</span></div>{job.location && <p className="experience-location">{job.location}</p>}<p className="experience-description">{job.description}</p><ul className="tech-list">{job.stack.map(t=><li key={t}>{t}</li>)}</ul><details className="work-details"><summary>Explore the work <span aria-hidden="true">+</span></summary><ul>{job.work.map(item=><li key={item}>{item}</li>)}</ul></details></div></article>)}</div></Page>;
+}
