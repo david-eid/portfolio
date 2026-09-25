@@ -24,17 +24,19 @@ Certifications retain the supplied issuer relationship: the AI-102 entry is Udem
 
 ## Portrait and visuals
 
-The homepage uses the supplied eight-second portrait video through a native HTML video element, with muted autoplay, looping, inline mobile playback and no controls. The square frame uses `object-fit: contain` so the site never crops the head or shoulders. The introduction sits beside the portrait on desktop and below it on phones.
+The homepage portrait is a scroll-controlled image sequence extracted from the supplied eight-second rotation. There is no video playback, autoplay or timer. A sticky hero maps its extra 140svh of native scroll distance to frames 0-96, with front-facing first and last frames. Reverse scrolling reverses the sequence; scrolling beyond the hero clamps it to its final frame. No touch gestures are intercepted.
 
-Web assets live in `public/media/`: a 960px H.264 MP4 (1.09 MB), a 640px mobile MP4 (381 KB), and a first-frame WebP poster (44 KB). Both videos have no audio track and use fast-start metadata. The poster is preloaded and remains visible while playback loads or autoplay is unavailable. Reduced-motion visitors receive the still image without downloading video; changing the preference updates the hero immediately. Playback pauses offscreen or in a hidden tab.
+`public/media/portrait-frames/` contains 97 square 640px WebP images totaling 1.13 MB. A canvas displays the frame selected by scroll progress, without interpolation that would keep moving after the user stops. Frame loading uses four concurrent requests and prioritizes the current target and its neighbors. Delayed requests cannot draw outdated frames. The complete original frame is preserved, without cropping the head or shoulders.
 
-To regenerate from the supplied source using FFmpeg:
+The first-frame poster remains underneath the canvas for loading or failed downloads. Reduced-motion visitors see only that poster, request no sequence frames, and skip the extra sticky scroll distance. Live preference changes are supported. The earlier optimized MP4 assets remain available but are not loaded by the hero.
+
+To regenerate the sequence from the original 24fps supplied source with FFmpeg:
 
 ```sh
-ffmpeg -i source.mp4 -an -vf "scale=960:960,fps=24" -c:v libx264 -preset slow -crf 25 -pix_fmt yuv420p -movflags +faststart public/media/david-eid-portrait.mp4
-ffmpeg -i source.mp4 -an -vf "scale=640:640,fps=24" -c:v libx264 -preset slow -crf 27 -pix_fmt yuv420p -movflags +faststart public/media/david-eid-portrait-mobile.mp4
-ffmpeg -i source.mp4 -frames:v 1 -c:v libwebp -quality 85 public/media/david-eid-poster.webp
+ffmpeg -i source.mp4 -vf "select='not(mod(n,2))',scale=640:640" -vsync vfr -c:v libwebp -quality 76 -start_number 0 public/media/portrait-frames/frame-%03d.webp
 ```
+
+The sequence includes the actual final front-facing frame rather than wrapping to its beginning.
 
 The original cutout remains in use on the About section.
 
@@ -76,3 +78,8 @@ The September 14 editorial update passed the production build, focused lint, and
 Production build and targeted lint passed. Browser checks covered 1440x900, 1920x1080, 768x1024, 393x852, 320x568 and 844x390: muted inline autoplay, looping, responsive source selection, square uncropped media, non-overlapping layout and no horizontal overflow. Reduced-motion checks confirmed a loaded poster and zero MP4 requests, including live preference changes. The hero project link and media failure poster were checked. Screenshots and the local Playwright script are in the ignored `work/hero-qa/` directory.
 
 Preview with `npm install` then `npm run dev` and open http://127.0.0.1:3000/. For a production preview, run `npm run build` then `npm run start` (stop the dev server first).
+
+
+## Scroll-controlled portrait validation
+
+Production build and targeted lint passed. Desktop and mobile browser checks covered 1440x900, 393x852, 320x568, 768x1024 and 844x390. Verified exact frames at 0%, 25%, 50%, 75% and 100%, reverse scrolling, unchanged canvas pixels while stopped, sticky positioning and release, final-frame clamping in later sections, native wheel and emulated touch scrolling, and no horizontal overflow. Reduced motion loads no animation assets and removes the extra scroll distance. Screenshots and the Playwright check are in `work/hero-qa/scroll-portrait-qa.mjs` (ignored local QA files). Touch tests use browser emulation, not physical iOS hardware.

@@ -35,17 +35,19 @@ export default function Home() {
 
   return <main id="main-content" tabIndex={-1} className="home" data-intro={intro}>
     {intro !== 'done' && <div className="intro-curtain" aria-hidden="true"><div className="intro-mark"><Logo /><span>David Eid</span></div></div>}
-    <section className="portrait-hero" aria-label="David Eid - Computer Engineer">
-      <h1 className="hero-word">ENGINEER</h1>
-      <div className="hero-content">
-        <div className="hero-copy home-reveal">
-          <div className="hero-identity"><p>David Eid</p><p>Computer Engineer<br />AI &amp; Full-Stack Engineer</p></div>
-          <p className="hero-introduction">I build intelligent systems and digital products, from LLM applications to scalable full-stack architectures.</p>
-          <a className="hero-explore" href="#projects">Explore work <ArrowUpRight size={17} /></a>
+    <section className="hero-scroll-track" aria-label="Portrait rotation">
+      <div className="portrait-hero" aria-label="David Eid - Computer Engineer">
+        <h1 className="hero-word">ENGINEER</h1>
+        <div className="hero-content">
+          <div className="hero-copy home-reveal">
+            <div className="hero-identity"><p>David Eid</p><p>Computer Engineer<br />AI &amp; Full-Stack Engineer</p></div>
+            <p className="hero-introduction">I build intelligent systems and digital products, from LLM applications to scalable full-stack architectures.</p>
+            <a className="hero-explore" href="#projects">Explore work <ArrowUpRight size={17} /></a>
+          </div>
+          <HeroPortrait />
         </div>
-        <HeroPortrait />
+        <a className="hero-scroll" href="#projects">Scroll to explore <ArrowDown size={12} /></a>
       </div>
-      <a className="hero-scroll" href="#projects">Scroll <ArrowDown size={12} /></a>
     </section>
     <EmbeddedPage.Provider value={true}>
       <section id="projects" className="home-section"><Projects /></section>
